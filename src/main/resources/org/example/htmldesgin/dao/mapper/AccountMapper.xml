@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0.4//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.htmldesgin.dao.mapper.AccountMapper">
+    <select id="findAll" resultType="org.example.htmldesgin.utils.AccountUser">
+        select id, username, role, telephone, email, remark 
+        from User.AccountUser
+    </select>
+
+    <insert id="addAccount" parameterType="org.example.htmldesgin.utils.AccountUser"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into User.AccountUser 
+        (username, role, telephone, email, remark)
+        values 
+        (#{username}, #{role}, #{telephone}, #{email}, #{remark})
+    </insert>
+
+    <update id="updateAccount" parameterType="org.example.htmldesgin.utils.AccountUser">
+        update User.AccountUser
+        set 
+            role = #{role},
+            telephone = #{telephone},
+            email = #{email},
+            remark = #{remark}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAccount">
+        delete from User.AccountUser where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="findByPage" resultType="org.example.htmldesgin.utils.AccountUser">
+        select id, username, role, telephone, email, remark 
+        from User.AccountUser
+        <where>
+            <if test="username != null and username != ''">
+                AND username LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="telephone != null and telephone != ''">
+                AND telephone LIKE CONCAT('%', #{telephone}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                AND email LIKE CONCAT('%', #{email}, '%')
+            </if>
+        </where>
+        limit #{offset}, #{limit}
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Integer">
+        select count(*) from User.AccountUser
+        <where>
+            <if test="username != null and username != ''">
+                AND username LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="telephone != null and telephone != ''">
+                AND telephone LIKE CONCAT('%', #{telephone}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                AND email LIKE CONCAT('%', #{email}, '%')
+            </if>
+        </where>
+    </select>
+</mapper>
