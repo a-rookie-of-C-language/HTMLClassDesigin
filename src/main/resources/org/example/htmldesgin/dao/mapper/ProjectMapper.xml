@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.htmldesgin.dao.mapper.ProjectMapper">
+
+    <select id="selectAll" resultType="org.example.htmldesgin.utils.Project">
+        SELECT * FROM project
+    </select>
+
+    <select id="selectByProjectNo" resultType="org.example.htmldesgin.utils.Project">
+        SELECT * FROM project WHERE projectNo = #{projectNo}
+    </select>
+
+    <select id="selectByGroupAndCompany" resultType="org.example.htmldesgin.utils.Project">
+        SELECT * FROM project
+        WHERE groupName = #{groupName}
+          AND companyName = #{companyName}
+    </select>
+
+    <insert id="insert" parameterType="org.example.htmldesgin.utils.Project">
+        INSERT INTO project (
+            projectNo, companyName, groupName, `system`,
+            contactPerson, contactEmail, hourlyRate,
+            contractHours, promisedHours, consumedHours
+        ) VALUES (
+                     #{projectNo}, #{companyName}, #{groupName}, #{system},
+                     #{contactPerson}, #{contactEmail}, #{hourlyRate},
+                     #{contractHours}, #{promisedHours}, #{consumedHours}
+                 )
+    </insert>
+
+    <update id="update" parameterType="org.example.htmldesgin.utils.Project">
+        UPDATE project
+        SET companyName = #{companyName},
+            groupName = #{groupName},
+            `system` = #{system},
+            contactPerson = #{contactPerson},
+            contactEmail = #{contactEmail},
+            hourlyRate = #{hourlyRate},
+            contractHours = #{contractHours},
+            promisedHours = #{promisedHours},
+            consumedHours = #{consumedHours}
+        WHERE projectNo = #{projectNo}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM project WHERE projectNo = #{projectNo}
+    </delete>
+
+    <select id="selectByPage" resultType="org.example.htmldesgin.utils.Project">
+        SELECT * FROM project
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <select id="selectCount" resultType="int">
+        SELECT COUNT(*) FROM project
+    </select>
+
+    <select id="selectAvailableProjects" resultType="string">
+        SELECT
+            companyName
+        FROM project
+        ORDER BY projectNo
+    </select>
+</mapper>

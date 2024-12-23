@@ -1,0 +1,11 @@
+projectNo,companyName,groupName,system,contactPerson,contactEmail,hourlyRate,contractHours,promisedHours,consumedHours
+PRJ20240001,阿里巴巴科技有限公司,阿里巴巴集团,JES,张三,zhangsan@alibaba.com,800.00,100.0,120.0,45.5
+PRJ20240002,腾讯科技(深圳)有限公司,腾讯控股,SES,李四,lisi@tencent.com,750.00,80.0,100.0,35.0
+PRJ20240003,百度在线网络技术(北京)有限公司,百度集团,3FES,王五,wangwu@baidu.com,680.00,150.0,180.0,90.5
+PRJ20240004,京东科技控股股份有限公司,京东集团,YLES,赵六,zhaoliu@jd.com,720.00,200.0,240.0,120.0
+PRJ20240005,字节跳动科技有限公司,字节跳动,JES,钱七,qianqi@bytedance.com,850.00,120.0,150.0,60.0
+PRJ20240006,美团点评科技有限公司,美团集团,SES,孙八,sunba@meituan.com,700.00,90.0,110.0,40.5
+PRJ20240007,网易(杭州)网络有限公司,网易集团,3FES,周九,zhoujiu@netease.com,780.00,160.0,190.0,85.5
+PRJ20240008,小米科技有限责任公司,小米集团,YLES,吴十,wushi@xiaomi.com,820.00,140.0,170.0,95.0
+PRJ20240009,滴滴出行科技有限公司,滴滴集团,JES,郑十一,zheng11@didi.com,730.00,110.0,130.0,70.5
+PRJ20240010,华为技术有限公司,华为集团,SES,陈十二,chen12@huawei.com,900.00,180.0,220.0,110.0 

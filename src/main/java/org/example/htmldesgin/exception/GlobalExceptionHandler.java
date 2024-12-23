@@ -31,15 +31,12 @@ public class GlobalExceptionHandler {
             return Result.error("该电话号码已存在");
         } 
         // 检查是否是邮箱
-        else if (duplicateValue.contains("@")) {
+        else if (duplicateValue.contains("email")) {
             return Result.error("该邮箱已存在");
         }
         // 检查具体的约束名称
         else if (message.contains("telephone")) {
             return Result.error("该电话号码已存在");
-        }
-        else if (message.contains("email")) {
-            return Result.error("该邮箱已存在");
         }
         else if (message.contains("username")) {
             return Result.error("该用户名已存在");

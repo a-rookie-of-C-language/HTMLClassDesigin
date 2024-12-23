@@ -4,17 +4,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.htmldesgin.service.AccountService;
 import org.example.htmldesgin.utils.AccountUser;
 import org.example.htmldesgin.utils.Result;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/account")
 @Slf4j
 public class AccountController {
     @Autowired

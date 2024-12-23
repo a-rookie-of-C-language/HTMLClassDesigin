@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.htmldesgin.dao.mapper.TrainingPlanMapper">
+
+    <resultMap id="BaseResultMap" type="org.example.htmldesgin.utils.TrainingPlan">
+        <id column="id" property="id"/>
+        <result column="projectNo" property="projectNo"/>
+        <result column="companyName" property="companyName"/>
+        <result column="groupName" property="groupName"/>
+        <result column="system" property="system"/>
+        <result column="trainer" property="trainer"/>
+        <result column="trainingTime" property="trainingTime"/>
+        <result column="trainingContext" property="trainingContext"/>
+        <result column="trainingDate" property="trainingDate" />
+        <result column="createTime" property="createTime"/>
+        <result column="updateTime" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, projectNo, companyName, groupName, `system`,
+        trainer, trainingTime, trainingContext, trainingDate ,createTime, updateTime
+    </sql>
+
+    <select id="selectByDateRange" resultMap="BaseResultMap">
+        SELECT id, projectNo, companyName, groupName, `system`,
+               trainer, trainingTime, trainingContext, trainingDate,createTime, updateTime
+        FROM trainingPlan
+        WHERE trainingDate BETWEEN #{startDate} AND #{endDate}
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT id, projectNo, companyName, groupName, `system`,
+               trainer, trainingTime, trainingContext, trainingDate,createTime, updateTime
+        FROM trainingPlan
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectCompanyNameByProjectNo" resultType="string">
+        SELECT companyName
+        FROM project
+        WHERE projectNo = #{projectNo}
+    </select>
+
+    <insert id="insert" parameterType="org.example.htmldesgin.utils.TrainingPlan"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO trainingPlan (
+            projectNo, companyName, groupName, `system`,
+            trainer, trainingTime, trainingContext, trainingDate,createTime, updateTime
+        ) VALUES (
+                     #{projectNo}, #{companyName}, #{groupName}, #{system},
+                     #{trainer}, #{trainingTime}, #{trainingContext},#{trainingDate} ,NOW(), NOW()
+                 )
+    </insert>
+
+    <update id="update" parameterType="org.example.htmldesgin.utils.TrainingPlan">
+        UPDATE trainingPlan
+        <set>
+            <if test="projectNo != null">projectNo = #{projectNo}</if>
+            <if test="companyName != null">,companyName = #{companyName}</if>
+            <if test="groupName != null">,groupName = #{groupName}</if>
+            <if test="system != null">,`system` = #{system}</if>
+            <if test="trainer != null">,trainer = #{trainer}</if>
+            <if test="trainingTime != null">,trainingTime = #{trainingTime}</if>
+            <if test="trainingDate!=null">,trainingDate = #{trainingDate}</if>
+            <if test="trainingContext != null">,trainingContext = #{trainingContext}</if>
+            , updateTime = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM trainingPlan WHERE id = #{id}
+    </delete>
+</mapper>
