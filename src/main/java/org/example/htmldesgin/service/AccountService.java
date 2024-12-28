@@ -20,7 +20,6 @@ public class AccountService {
     private static final int PAGE_SIZE = 1000;  // 每次加载1000条
 
     public Map<String, Object> findByPage(Integer page, Map<String, String> searchParams) {
-        log.info("Finding page: {}, size: {}, params: {}", page, PAGE_SIZE, searchParams);
         
         int offset = (page - 1) * PAGE_SIZE;
         String username = searchParams.get("username");
@@ -59,5 +58,9 @@ public class AccountService {
             return 0;
         }
         return accountMapper.deleteAccount(ids);
+    }
+
+    public List<String> findUsernameByIds(Integer[] ids) {
+        return accountMapper.findUsernameByIds(ids);
     }
 }

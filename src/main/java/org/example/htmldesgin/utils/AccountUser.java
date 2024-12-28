@@ -14,4 +14,5 @@ public class AccountUser {
     private String telephone;
     private String email;
     private String remark;
+    private String password;
 }

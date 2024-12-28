@@ -10,6 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 public class User {
-    private String email;
+    private String account;
     private String password;
 }

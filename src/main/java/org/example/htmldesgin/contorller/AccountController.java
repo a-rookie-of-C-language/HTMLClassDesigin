@@ -2,6 +2,7 @@ package org.example.htmldesgin.contorller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.htmldesgin.service.AccountService;
+import org.example.htmldesgin.service.TrainerWorkingHoursService;
 import org.example.htmldesgin.utils.AccountUser;
 import org.example.htmldesgin.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ import java.util.Map;
 public class AccountController {
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private TrainerWorkingHoursService trainerWorkingHoursService;
 
     @GetMapping("/account")
     public Result getAccount(
@@ -45,7 +49,14 @@ public class AccountController {
         if (accountUser == null || accountUser.getUsername() == null) {
             return Result.error("用户名不能为空");
         }
+        if (accountUser.getRole().equals("管理员")) {
+            return accountService.addAccount(accountUser) == 1
+                    ? Result.success("添加成功")
+                    : Result.error("添加失败");
+        }
         return accountService.addAccount(accountUser) == 1
+                && trainerWorkingHoursService
+                .addWorkingHours(accountUser.getUsername())
                 ? Result.success("添加成功")
                 : Result.error("添加失败");
     }
@@ -61,6 +72,8 @@ public class AccountController {
     public Result deleteAccount(@RequestBody Integer[] ids) {
         int count = accountService.deleteAccount(ids);
         return count > 0
+                && trainerWorkingHoursService
+                .deleteWorkingHours(accountService.findUsernameByIds(ids))
                 ? Result.success("成功删除" + count + "条记录")
                 : Result.error("删除失败");
     }

@@ -9,6 +9,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.lang.NonNull;
 
@@ -44,5 +45,18 @@ public class WebConfig implements WebMvcConfigurer {
                         .allowCredentials(false);
             }
         };
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new JwtInterceptor())
+                .addPathPatterns("/**")          // 拦截所有请求
+                .excludePathPatterns(            // 不拦截以下路径
+                        "/login",                // 登录接口
+                        "/register",             // 如果有注册接口
+                        "/error",                // 错误页面
+                        "/swagger-ui/**",        // Swagger文档（如果有）
+                        "/v3/api-docs/**"        // OpenAPI文档（如果有）
+                );
     }
 }

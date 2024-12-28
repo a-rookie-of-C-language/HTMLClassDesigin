@@ -3,39 +3,27 @@ package org.example.htmldesgin.service;
 import org.example.htmldesgin.utils.Project;
 import org.example.htmldesgin.dao.mapper.ProjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Component
 @Service
-public class ProjectService{
+public class ProjectService {
 
     @Autowired
     private ProjectMapper projectMapper;
 
-    public List<Project> getAllProjects() {
-        return projectMapper.selectAll();
-    }
-
-    public Project getProjectByNo(String projectNo) {
-        return projectMapper.selectByProjectNo(projectNo);
-    }
-
     @Transactional
     public void addProject(Project project) {
-        // 验证项目号唯一性
         if (projectMapper.selectByProjectNo(project.getProjectNo()) != null) {
             throw new RuntimeException("项目号已存在");
         }
-
-        // 验证同一集团下企业名称唯一性
         if (projectMapper.selectByGroupAndCompany(project.getGroupName(), project.getCompanyName()) != null) {
             throw new RuntimeException("同一集团下企业名称不能重复");
         }
-
         projectMapper.insert(project);
     }
 
@@ -45,14 +33,6 @@ public class ProjectService{
         if (existingProject == null) {
             throw new RuntimeException("项目不存在");
         }
-
-        // 验证同一集团下企业名称唯一性（排除自身）
-        Project sameNameProject = projectMapper.selectByGroupAndCompany(
-                project.getGroupName(), project.getCompanyName());
-        if (sameNameProject != null && !sameNameProject.getProjectNo().equals(project.getProjectNo())) {
-            throw new RuntimeException("同一集团下企业名称不能重复");
-        }
-
         projectMapper.update(project);
     }
 
@@ -72,5 +52,53 @@ public class ProjectService{
 
     public List<String> getAvailableProjects() {
         return projectMapper.selectAvailableProjects();
+    }
+
+    @Transactional
+    public List<Project> getProjectReportWithUpdatedHours(int page, int pageSize) {
+        int offset = (page - 1) * pageSize;
+        List<Project> projects = projectMapper.selectByPage(offset, pageSize);
+        return projects.stream()
+                .map(this::updateProjectHours)
+                .collect(Collectors.toList());
+    }
+
+    private Project updateProjectHours(Project project) {
+        if (project.getStartDate() == null) {
+            return project;
+        }
+        double consumedHours = calculateConsumedHours(project.getStartDate());
+        project.setConsumedHours(consumedHours);
+        projectMapper.updateProjectHours(project);
+        return project;
+    }
+
+    private double calculateConsumedHours(LocalDate startDate) {
+        if (startDate == null) {
+            return 0;
+        }
+        LocalDate now = LocalDate.now();
+        if (startDate.isAfter(now)) {
+            return 0;
+        }
+        int workDays = 0;
+        LocalDate current = startDate;
+        while (!current.isAfter(now)) {
+            if (current.getDayOfWeek().getValue() <= 5) {
+                workDays++;
+            }
+            current = current.plusDays(1);
+        }
+        return workDays;
+    }
+
+    @Transactional
+    public void updateRemainingAmount(String projectNo, Double remainingAmount) {
+        Project project = projectMapper.selectByProjectNo(projectNo);
+        if (project == null) {
+            throw new RuntimeException("项目不存在");
+        }
+        project.setRemainingAmount(remainingAmount);
+        projectMapper.updateRemainingAmount(project);
     }
 }

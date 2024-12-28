@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private static final Pattern PHONE_PATTERN = Pattern.compile("^1[3-9]\\d{9}$");
 
-    @ExceptionHandler(value = {DuplicateKeyException.class, SQLIntegrityConstraintViolationException.class})
+    @ExceptionHandler(value = {SQLIntegrityConstraintViolationException.class,DuplicateKeyException.class})
     public Result handleSQLIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e) {
         log.error("数据库唯一约束异常：", e);
         String message = e.getMessage();
@@ -31,12 +31,8 @@ public class GlobalExceptionHandler {
             return Result.error("该电话号码已存在");
         } 
         // 检查是否是邮箱
-        else if (duplicateValue.contains("email")) {
+        else if (duplicateValue.contains("@")) {
             return Result.error("该邮箱已存在");
-        }
-        // 检查具体的约束名称
-        else if (message.contains("telephone")) {
-            return Result.error("该电话号码已存在");
         }
         else if (message.contains("username")) {
             return Result.error("该用户名已存在");

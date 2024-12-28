@@ -25,4 +25,8 @@ public interface ProjectMapper {
     int selectCount();
 
     List<String> selectAvailableProjects();
+
+    void updateProjectHours(Project project);
+
+    void updateRemainingAmount(Project project);
 }

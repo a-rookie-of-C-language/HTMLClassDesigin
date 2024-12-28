@@ -42,6 +42,10 @@ public class Result implements Serializable {
         return new Result(200, "success", null);
     }
 
+    public static Result success(final String msg, final Object data) {
+        return new Result(200, msg, data);
+    }
+
     public static Result success(final Object data) {
         return new Result(200, "success", data);
     }

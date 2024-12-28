@@ -20,11 +20,11 @@
         INSERT INTO project (
             projectNo, companyName, groupName, `system`,
             contactPerson, contactEmail, hourlyRate,
-            contractHours, promisedHours, consumedHours
+            contractHours, promisedHours, consumedHours,startDate
         ) VALUES (
                      #{projectNo}, #{companyName}, #{groupName}, #{system},
                      #{contactPerson}, #{contactEmail}, #{hourlyRate},
-                     #{contractHours}, #{promisedHours}, #{consumedHours}
+                     #{contractHours}, #{promisedHours}, #{consumedHours},#{startDate}
                  )
     </insert>
 
@@ -38,7 +38,8 @@
             hourlyRate = #{hourlyRate},
             contractHours = #{contractHours},
             promisedHours = #{promisedHours},
-            consumedHours = #{consumedHours}
+            consumedHours = #{consumedHours},
+            startDate = #{startDate}
         WHERE projectNo = #{projectNo}
     </update>
 
@@ -61,4 +62,16 @@
         FROM project
         ORDER BY projectNo
     </select>
+
+<update id="updateProjectHours" parameterType="org.example.htmldesgin.utils.Project">
+    UPDATE project
+    SET consumedHours = #{consumedHours}
+    WHERE projectNo = #{projectNo}
+</update>
+
+<update id="updateRemainingAmount" parameterType="org.example.htmldesgin.utils.Project">
+    UPDATE project
+    SET remainingAmount = #{remainingAmount}
+    WHERE projectNo = #{projectNo}
+</update>
 </mapper>
